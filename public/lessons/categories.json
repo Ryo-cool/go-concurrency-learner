@@ -1,0 +1,32 @@
+{
+  "categories": [
+    {
+      "id": "basic",
+      "name": "基礎編",
+      "description": "Golangの並行処理の基本的な概念を学びます",
+      "icon": "🎯",
+      "order": 1
+    },
+    {
+      "id": "channel",
+      "name": "チャネル操作編",
+      "description": "チャネルの高度な使い方をマスターします",
+      "icon": "📡",
+      "order": 2
+    },
+    {
+      "id": "sync",
+      "name": "同期編",
+      "description": "同期プリミティブを使った並行処理の制御を学びます",
+      "icon": "🔐",
+      "order": 3
+    },
+    {
+      "id": "pattern",
+      "name": "実践パターン編",
+      "description": "実用的な並行処理パターンを習得します",
+      "icon": "🏗️",
+      "order": 4
+    }
+  ]
+}

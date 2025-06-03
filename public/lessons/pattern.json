@@ -1,0 +1,124 @@
+{
+  "lessons": [
+    {
+      "id": "pattern-1",
+      "title": "Worker Pool",
+      "category": "pattern",
+      "difficulty": "advanced",
+      "description": "<p>Worker Poolパターンは、固定数のワーカーで多数のタスクを処理する並行処理パターンです。</p><p>この課題では、3つのワーカーで10個のジョブを処理するWorker Poolを実装します。</p><ul><li>ジョブ用とリザルト用のチャネルを作成</li><li>ワーカーGoルーチンを起動</li><li>ジョブを投入して結果を収集</li></ul>",
+      "objectives": [
+        "Worker Poolパターンを理解する",
+        "ジョブキューの実装方法を学ぶ",
+        "効率的な並行処理を実現する"
+      ],
+      "hints": [
+        {
+          "text": "ジョブチャネルとリザルトチャネルを別々に作成します",
+          "level": 1
+        },
+        {
+          "text": "ワーカーは無限ループでジョブを待機します",
+          "level": 2
+        },
+        {
+          "text": "for job := range jobs { ... } でジョブを処理します",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc worker(id int, jobs <-chan int, results chan<- int) {\n    // ワーカーの実装\n}\n\nfunc main() {\n    // Worker Poolを実装してください\n    \n}",
+      "expectedKeywords": ["chan", "range", "go worker", "close"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc worker(id int, jobs <-chan int, results chan<- int) {\n    for job := range jobs {\n        fmt.Printf(\"Worker %d processing job %d\\n\", id, job)\n        time.Sleep(100 * time.Millisecond)\n        results <- job * 2\n    }\n}\n\nfunc main() {\n    jobs := make(chan int, 10)\n    results := make(chan int, 10)\n    \n    // Start workers\n    for w := 1; w <= 3; w++ {\n        go worker(w, jobs, results)\n    }\n    \n    // Send jobs\n    for j := 1; j <= 10; j++ {\n        jobs <- j\n    }\n    close(jobs)\n    \n    // Collect results\n    for r := 1; r <= 10; r++ {\n        result := <-results\n        fmt.Printf(\"Result: %d\\n\", result)\n    }\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Worker"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Worker Pools",
+          "url": "https://gobyexample.com/worker-pools"
+        }
+      ]
+    },
+    {
+      "id": "pattern-2",
+      "title": "Pipeline Pattern",
+      "category": "pattern",
+      "difficulty": "advanced",
+      "description": "<p>Pipelineパターンは、データ処理を複数のステージに分割し、各ステージを並行処理します。</p><p>この課題では、数値を2倍にして、さらに1を加えるパイプラインを実装します。</p><ul><li>各ステージを関数として実装</li><li>チャネルでステージを接続</li><li>データを流して処理</li></ul>",
+      "objectives": [
+        "Pipelineパターンを理解する",
+        "ステージ間のデータフローを実装する",
+        "関数型プログラミングの考え方を学ぶ"
+      ],
+      "hints": [
+        {
+          "text": "各ステージは入力チャネルと出力チャネルを持ちます",
+          "level": 1
+        },
+        {
+          "text": "ステージは独立したGoルーチンで実行します",
+          "level": 2
+        },
+        {
+          "text": "入力を処理して出力に送る処理をループします",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport \"fmt\"\n\nfunc double(in <-chan int) <-chan int {\n    // 2倍にするステージ\n}\n\nfunc addOne(in <-chan int) <-chan int {\n    // 1を加えるステージ\n}\n\nfunc main() {\n    // パイプラインを構築してください\n    \n}",
+      "expectedKeywords": ["chan", "range", "go func", "return"],
+      "solution": "package main\n\nimport \"fmt\"\n\nfunc double(in <-chan int) <-chan int {\n    out := make(chan int)\n    go func() {\n        for n := range in {\n            out <- n * 2\n        }\n        close(out)\n    }()\n    return out\n}\n\nfunc addOne(in <-chan int) <-chan int {\n    out := make(chan int)\n    go func() {\n        for n := range in {\n            out <- n + 1\n        }\n        close(out)\n    }()\n    return out\n}\n\nfunc main() {\n    // Create pipeline\n    numbers := make(chan int)\n    \n    // Connect stages\n    doubled := double(numbers)\n    final := addOne(doubled)\n    \n    // Send data\n    go func() {\n        for i := 1; i <= 5; i++ {\n            numbers <- i\n        }\n        close(numbers)\n    }()\n    \n    // Receive results\n    for result := range final {\n        fmt.Printf(\"Result: %d\\n\", result)\n    }\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Result:"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go Concurrency Patterns: Pipelines",
+          "url": "https://blog.golang.org/pipelines"
+        }
+      ]
+    },
+    {
+      "id": "pattern-3",
+      "title": "Fan-in/Fan-out",
+      "category": "pattern",
+      "difficulty": "advanced",
+      "description": "<p>Fan-outは1つの入力を複数のワーカーに分配し、Fan-inは複数の入力を1つの出力に集約します。</p><p>この課題では、1つの入力を3つのワーカーに分配し、結果を1つのチャネルに集約します。</p><ul><li>Fan-out: 入力を複数ワーカーに分配</li><li>各ワーカーで処理を実行</li><li>Fan-in: 結果を1つのチャネルに集約</li></ul>",
+      "objectives": [
+        "Fan-in/Fan-outパターンを理解する",
+        "負荷分散の実装方法を学ぶ",
+        "結果の集約方法を習得する"
+      ],
+      "hints": [
+        {
+          "text": "複数のワーカーが同じ入力チャネルから読み取ります",
+          "level": 1
+        },
+        {
+          "text": "各ワーカーは独自の出力チャネルを持ちます",
+          "level": 2
+        },
+        {
+          "text": "select文やgoroutineで結果を集約します",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc worker(id int, in <-chan int) <-chan string {\n    // ワーカーの実装\n}\n\nfunc fanIn(channels ...<-chan string) <-chan string {\n    // Fan-inの実装\n}\n\nfunc main() {\n    // Fan-in/Fan-outを実装してください\n    \n}",
+      "expectedKeywords": ["chan", "select", "sync.WaitGroup", "range"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc worker(id int, in <-chan int) <-chan string {\n    out := make(chan string)\n    go func() {\n        for n := range in {\n            out <- fmt.Sprintf(\"Worker %d processed %d\", id, n)\n        }\n        close(out)\n    }()\n    return out\n}\n\nfunc fanIn(channels ...<-chan string) <-chan string {\n    out := make(chan string)\n    var wg sync.WaitGroup\n    \n    for _, ch := range channels {\n        wg.Add(1)\n        go func(c <-chan string) {\n            defer wg.Done()\n            for msg := range c {\n                out <- msg\n            }\n        }(ch)\n    }\n    \n    go func() {\n        wg.Wait()\n        close(out)\n    }()\n    \n    return out\n}\n\nfunc main() {\n    // Input channel\n    in := make(chan int)\n    \n    // Fan-out to 3 workers\n    w1 := worker(1, in)\n    w2 := worker(2, in)\n    w3 := worker(3, in)\n    \n    // Fan-in results\n    merged := fanIn(w1, w2, w3)\n    \n    // Send input\n    go func() {\n        for i := 1; i <= 9; i++ {\n            in <- i\n        }\n        close(in)\n    }()\n    \n    // Receive results\n    for result := range merged {\n        fmt.Println(result)\n    }\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Worker"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Advanced Go Concurrency Patterns",
+          "url": "https://talks.golang.org/2013/advconc.slide"
+        }
+      ]
+    }
+  ]
+}

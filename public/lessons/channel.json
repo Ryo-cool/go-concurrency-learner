@@ -1,0 +1,124 @@
+{
+  "lessons": [
+    {
+      "id": "channel-1",
+      "title": "Select文",
+      "category": "channel",
+      "difficulty": "intermediate",
+      "description": "<p>select文を使うと、複数のチャネル操作を同時に待機できます。最初に準備できた操作が実行されます。</p><p>この課題では、2つのチャネルからの受信を同時に待機し、先に到着したメッセージを処理します。</p><ul><li>2つのチャネルを作成する</li><li>それぞれ異なる遅延で値を送信する</li><li>select文で受信を待機する</li></ul>",
+      "objectives": [
+        "select文の基本的な使い方を理解する",
+        "複数チャネルの同時待機を実装する",
+        "非決定的な動作を理解する"
+      ],
+      "hints": [
+        {
+          "text": "select文は複数のcaseを持つことができます",
+          "level": 1
+        },
+        {
+          "text": "各caseはチャネル操作（送信または受信）を含みます",
+          "level": 2
+        },
+        {
+          "text": "select { case msg1 := <-ch1: ... case msg2 := <-ch2: ... }",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    // select文を使って複数チャネルを処理してください\n    \n}",
+      "expectedKeywords": ["select", "case", "<-", "chan"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    ch1 := make(chan string)\n    ch2 := make(chan string)\n    \n    go func() {\n        time.Sleep(100 * time.Millisecond)\n        ch1 <- \"from ch1\"\n    }()\n    \n    go func() {\n        time.Sleep(200 * time.Millisecond)\n        ch2 <- \"from ch2\"\n    }()\n    \n    select {\n    case msg1 := <-ch1:\n        fmt.Println(\"Received:\", msg1)\n    case msg2 := <-ch2:\n        fmt.Println(\"Received:\", msg2)\n    }\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Received: from ch1"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Select",
+          "url": "https://gobyexample.com/select"
+        }
+      ]
+    },
+    {
+      "id": "channel-2",
+      "title": "チャネルのクローズ",
+      "category": "channel",
+      "difficulty": "intermediate",
+      "description": "<p>チャネルはclose()関数でクローズできます。クローズされたチャネルからは値を受信できますが、送信はパニックを引き起こします。</p><p>この課題では、チャネルのクローズと、クローズの検出を実装します。</p><ul><li>チャネルに複数の値を送信する</li><li>チャネルをクローズする</li><li>クローズを検出しながら値を受信する</li></ul>",
+      "objectives": [
+        "チャネルのクローズ方法を学ぶ",
+        "クローズの検出方法を理解する",
+        "range文でのチャネル操作を習得する"
+      ],
+      "hints": [
+        {
+          "text": "close(ch)でチャネルをクローズします",
+          "level": 1
+        },
+        {
+          "text": "value, ok := <-ch でクローズを検出できます",
+          "level": 2
+        },
+        {
+          "text": "for range ch でクローズまで受信を続けられます",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    // チャネルのクローズを実装してください\n    \n}",
+      "expectedKeywords": ["close", "range", "chan"],
+      "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan int, 3)\n    \n    ch <- 1\n    ch <- 2\n    ch <- 3\n    close(ch)\n    \n    for v := range ch {\n        fmt.Println(\"Received:\", v)\n    }\n    \n    fmt.Println(\"Channel closed\")\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Received: 1\nReceived: 2\nReceived: 3\nChannel closed"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Closing Channels",
+          "url": "https://gobyexample.com/closing-channels"
+        }
+      ]
+    },
+    {
+      "id": "channel-3",
+      "title": "方向性のあるチャネル",
+      "category": "channel",
+      "difficulty": "intermediate",
+      "description": "<p>チャネルは送信専用または受信専用として関数に渡すことができます。これにより、チャネルの誤用を防げます。</p><p>この課題では、送信専用と受信専用のチャネルを使った関数を実装します。</p><ul><li>送信専用チャネルを受け取る関数を作成</li><li>受信専用チャネルを受け取る関数を作成</li><li>適切にチャネルを使用する</li></ul>",
+      "objectives": [
+        "チャネルの方向性を理解する",
+        "送信専用・受信専用チャネルの記法を学ぶ",
+        "型安全なチャネル操作を実装する"
+      ],
+      "hints": [
+        {
+          "text": "chan<- int は送信専用チャネルです",
+          "level": 1
+        },
+        {
+          "text": "<-chan int は受信専用チャネルです",
+          "level": 2
+        },
+        {
+          "text": "通常のチャネルは両方向として使えます",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport \"fmt\"\n\n// 送信専用チャネルを受け取る関数\nfunc send(ch chan<- int) {\n    // 実装してください\n}\n\n// 受信専用チャネルを受け取る関数\nfunc receive(ch <-chan int) {\n    // 実装してください\n}\n\nfunc main() {\n    // 関数を使ってください\n    \n}",
+      "expectedKeywords": ["chan<-", "<-chan", "make"],
+      "solution": "package main\n\nimport \"fmt\"\n\n// 送信専用チャネルを受け取る関数\nfunc send(ch chan<- int) {\n    ch <- 42\n}\n\n// 受信専用チャネルを受け取る関数\nfunc receive(ch <-chan int) {\n    value := <-ch\n    fmt.Println(\"Received:\", value)\n}\n\nfunc main() {\n    ch := make(chan int)\n    \n    go send(ch)\n    receive(ch)\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Received: 42"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Channel Directions",
+          "url": "https://gobyexample.com/channel-directions"
+        }
+      ]
+    }
+  ]
+}

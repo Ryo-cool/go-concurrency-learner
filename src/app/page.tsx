@@ -1,103 +1,151 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { ThreePanelLayout } from '@/components/layout/ThreePanelLayout';
+import { LessonPanel } from '@/components/lesson-panel/LessonPanel';
+import { CodeEditor } from '@/components/code-editor/CodeEditor';
+import { ConsolePanel } from '@/components/console-panel/ConsolePanel';
+import { Navigation } from '@/components/navigation/Navigation';
+import { useGoExecutor } from '@/hooks/useGoExecutor';
+import { useLessons } from '@/hooks/useLessons';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [code, setCode] = useState('');
+  const goExecutor = useGoExecutor();
+  const {
+    lessons,
+    currentLesson,
+    isLoading,
+    loadLessons,
+    selectLesson,
+    updateProgress,
+    getNextLesson,
+    getPreviousLesson,
+  } = useLessons();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+  // Load lessons on mount
+  useEffect(() => {
+    loadLessons();
+  }, [loadLessons]);
+
+  // Update code when lesson changes
+  useEffect(() => {
+    if (currentLesson) {
+      setCode(currentLesson.initialCode);
+    }
+  }, [currentLesson]);
+
+  const handlePrevious = () => {
+    const prevLesson = getPreviousLesson();
+    if (prevLesson) {
+      selectLesson(prevLesson.id);
+      goExecutor.clearOutputs();
+    }
+  };
+
+  const handleNext = () => {
+    const nextLesson = getNextLesson();
+    if (nextLesson) {
+      selectLesson(nextLesson.id);
+      goExecutor.clearOutputs();
+    }
+  };
+
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode);
+    if (currentLesson) {
+      updateProgress(currentLesson.id, 'in-progress', newCode);
+    }
+  };
+
+  const handleReset = () => {
+    if (currentLesson) {
+      setCode(currentLesson.initialCode);
+    }
+  };
+
+  const handleRun = async () => {
+    await goExecutor.execute(code);
+  };
+
+  const handleClear = () => {
+    goExecutor.clearOutputs();
+  };
+
+  const handleCheckAnswer = (currentCode: string) => {
+    if (!currentLesson) return;
+    
+    const hasAllKeywords = currentLesson.expectedKeywords.every((keyword) =>
+      currentCode.includes(keyword)
+    );
+
+    // Update progress if correct
+    if (hasAllKeywords) {
+      updateProgress(currentLesson.id, 'completed', currentCode);
+    }
+
+    const message = hasAllKeywords
+      ? '✅ 正解です！必要なキーワードが全て含まれています。'
+      : '❌ 不正解です。ヒントを参考にもう一度試してみてください。';
+    
+    // 一時的にアラートで表示（後でより良いUIに改善）
+    alert(message);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-gray-500">レッスンを読み込み中...</div>
+      </div>
+    );
+  }
+
+  if (!currentLesson) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-gray-500">レッスンが見つかりません</div>
+      </div>
+    );
+  }
+
+  const currentIndex = lessons.findIndex(l => l.id === currentLesson.id);
+
+  return (
+    <div className="h-screen flex flex-col">
+      <ThreePanelLayout
+        className="flex-1"
+        leftPanel={
+          <LessonPanel
+            lesson={currentLesson}
+            onCheckAnswer={handleCheckAnswer}
+            currentCode={code}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+        }
+        centerPanel={
+          <CodeEditor
+            initialCode={code}
+            onChange={handleCodeChange}
+            onReset={handleReset}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+        }
+        rightPanel={
+          <ConsolePanel
+            outputs={goExecutor.outputs}
+            onRun={handleRun}
+            onClear={handleClear}
+            isRunning={goExecutor.isExecuting}
+            onCancel={goExecutor.cancelExecution}
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        }
+      />
+      <Navigation
+        currentLesson={currentIndex + 1}
+        totalLessons={lessons.length}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        canGoPrevious={currentIndex > 0}
+        canGoNext={currentIndex < lessons.length - 1}
+      />
     </div>
   );
 }

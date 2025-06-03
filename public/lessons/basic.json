@@ -1,0 +1,124 @@
+{
+  "lessons": [
+    {
+      "id": "basic-1",
+      "title": "Goルーチン基礎",
+      "category": "basic",
+      "difficulty": "beginner",
+      "description": "<p>Goルーチンは、Goにおける並行処理の基本単位です。<code>go</code>キーワードを使用することで、新しいGoルーチンを起動できます。</p><p>この課題では、簡単なGoルーチンを作成し、並行処理の基本を学びます。</p><ul><li>メイン関数内で新しいGoルーチンを起動する</li><li>Goルーチン内で\"Hello from Goroutine!\"を出力する</li><li>メイン関数で少し待機してからプログラムを終了する</li></ul>",
+      "objectives": [
+        "Goルーチンの基本的な作成方法を理解する",
+        "go キーワードの使い方を習得する",
+        "並行処理の基本的な動作を体験する"
+      ],
+      "hints": [
+        {
+          "text": "go キーワードを使って新しいGoルーチンを起動します",
+          "level": 1
+        },
+        {
+          "text": "time.Sleep()を使ってメインGoルーチンを待機させます",
+          "level": 2
+        },
+        {
+          "text": "匿名関数を使って go func() { ... }() の形式で書けます",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    // ここにコードを書いてください\n    \n}",
+      "expectedKeywords": ["go", "fmt.Println", "time.Sleep", "Goroutine"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    go func() {\n        fmt.Println(\"Hello from Goroutine!\")\n    }()\n    \n    time.Sleep(1 * time.Second)\n    fmt.Println(\"Main function completed\")\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Hello from Goroutine!"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Effective Go - Goroutines",
+          "url": "https://golang.org/doc/effective_go#goroutines"
+        }
+      ]
+    },
+    {
+      "id": "basic-2",
+      "title": "チャネル基礎",
+      "category": "basic",
+      "difficulty": "beginner",
+      "description": "<p>チャネルは、Goルーチン間でデータを安全に共有するための仕組みです。</p><p>この課題では、チャネルを使ってGoルーチン間でメッセージを送受信します。</p><ul><li>文字列型のチャネルを作成する</li><li>Goルーチン内からチャネルにメッセージを送信する</li><li>メインGoルーチンでメッセージを受信して出力する</li></ul>",
+      "objectives": [
+        "チャネルの作成方法を理解する",
+        "チャネルへの送信と受信の記法を習得する",
+        "Goルーチン間の通信方法を学ぶ"
+      ],
+      "hints": [
+        {
+          "text": "make(chan string)でチャネルを作成します",
+          "level": 1
+        },
+        {
+          "text": "ch <- \"message\"でチャネルに送信します",
+          "level": 2
+        },
+        {
+          "text": "<-ch でチャネルから受信します",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    // チャネルを作成してメッセージを送受信してください\n    \n}",
+      "expectedKeywords": ["make", "chan", "<-"],
+      "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan string)\n    \n    go func() {\n        ch <- \"Hello from channel!\"\n    }()\n    \n    message := <-ch\n    fmt.Println(message)\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Hello from channel!"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Channels",
+          "url": "https://gobyexample.com/channels"
+        }
+      ]
+    },
+    {
+      "id": "basic-3",
+      "title": "Buffered Channel",
+      "category": "basic",
+      "difficulty": "beginner",
+      "description": "<p>バッファ付きチャネルは、指定した数の値を保持できるチャネルです。送信側は、バッファが満杯でない限りブロックされません。</p><p>この課題では、バッファ付きチャネルを作成し、複数の値を送受信します。</p><ul><li>容量2のバッファ付きチャネルを作成する</li><li>2つの値を送信する</li><li>値を受信して出力する</li></ul>",
+      "objectives": [
+        "バッファ付きチャネルの作成方法を理解する",
+        "バッファ付きチャネルの特性を学ぶ",
+        "ブロッキングの概念を理解する"
+      ],
+      "hints": [
+        {
+          "text": "make(chan int, 2)で容量2のバッファ付きチャネルを作成します",
+          "level": 1
+        },
+        {
+          "text": "バッファ付きチャネルは、バッファが満杯でなければ送信時にブロックしません",
+          "level": 2
+        },
+        {
+          "text": "複数の値を連続して送信してみましょう",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    // バッファ付きチャネルを作成して使用してください\n    \n}",
+      "expectedKeywords": ["make", "chan", "2"],
+      "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan int, 2)\n    \n    ch <- 1\n    ch <- 2\n    \n    fmt.Println(<-ch)\n    fmt.Println(<-ch)\n}",
+      "testCases": [
+        {
+          "expectedOutput": "1\n2"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Channel Buffering",
+          "url": "https://gobyexample.com/channel-buffering"
+        }
+      ]
+    }
+  ]
+}

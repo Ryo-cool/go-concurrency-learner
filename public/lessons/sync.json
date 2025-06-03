@@ -1,0 +1,124 @@
+{
+  "lessons": [
+    {
+      "id": "sync-1",
+      "title": "WaitGroup",
+      "category": "sync",
+      "difficulty": "intermediate",
+      "description": "<p>sync.WaitGroupを使うと、複数のGoルーチンの完了を待機できます。</p><p>この課題では、3つのワーカーGoルーチンを起動し、全ての完了を待機します。</p><ul><li>WaitGroupを作成する</li><li>3つのワーカーを起動する</li><li>全ワーカーの完了を待機する</li></ul>",
+      "objectives": [
+        "WaitGroupの基本的な使い方を理解する",
+        "Add、Done、Waitメソッドの使い方を習得する",
+        "複数Goルーチンの同期方法を学ぶ"
+      ],
+      "hints": [
+        {
+          "text": "wg.Add(n)でカウンタをnだけ増やします",
+          "level": 1
+        },
+        {
+          "text": "wg.Done()でカウンタを1減らします（defer推奨）",
+          "level": 2
+        },
+        {
+          "text": "wg.Wait()で全てのDone()を待機します",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n    \"time\"\n)\n\nfunc worker(id int) {\n    // ワーカーの処理\n    time.Sleep(100 * time.Millisecond)\n    fmt.Printf(\"Worker %d done\\n\", id)\n}\n\nfunc main() {\n    // WaitGroupを使って実装してください\n    \n}",
+      "expectedKeywords": ["sync.WaitGroup", "Add", "Done", "Wait"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n    \"time\"\n)\n\nfunc worker(id int, wg *sync.WaitGroup) {\n    defer wg.Done()\n    time.Sleep(100 * time.Millisecond)\n    fmt.Printf(\"Worker %d done\\n\", id)\n}\n\nfunc main() {\n    var wg sync.WaitGroup\n    \n    for i := 1; i <= 3; i++ {\n        wg.Add(1)\n        go worker(i, &wg)\n    }\n    \n    wg.Wait()\n    fmt.Println(\"All workers completed\")\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Worker"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: WaitGroups",
+          "url": "https://gobyexample.com/waitgroups"
+        }
+      ]
+    },
+    {
+      "id": "sync-2",
+      "title": "Mutex",
+      "category": "sync",
+      "difficulty": "intermediate",
+      "description": "<p>sync.Mutexは、共有リソースへの排他的アクセスを提供します。</p><p>この課題では、複数のGoルーチンから安全にカウンタを更新します。</p><ul><li>共有カウンタとMutexを作成する</li><li>複数のGoルーチンからカウンタを更新する</li><li>Mutexで競合状態を防ぐ</li></ul>",
+      "objectives": [
+        "Mutexの基本的な使い方を理解する",
+        "Lock/Unlockメソッドの使い方を習得する",
+        "競合状態の防止方法を学ぶ"
+      ],
+      "hints": [
+        {
+          "text": "mutex.Lock()で排他ロックを取得します",
+          "level": 1
+        },
+        {
+          "text": "mutex.Unlock()でロックを解放します（defer推奨）",
+          "level": 2
+        },
+        {
+          "text": "クリティカルセクションは最小限に保ちます",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc main() {\n    var counter int\n    // Mutexを使って安全にカウンタを更新してください\n    \n}",
+      "expectedKeywords": ["sync.Mutex", "Lock", "Unlock", "defer"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc main() {\n    var counter int\n    var mutex sync.Mutex\n    var wg sync.WaitGroup\n    \n    for i := 0; i < 5; i++ {\n        wg.Add(1)\n        go func() {\n            defer wg.Done()\n            mutex.Lock()\n            defer mutex.Unlock()\n            counter++\n        }()\n    }\n    \n    wg.Wait()\n    fmt.Println(\"Counter:\", counter)\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Counter: 5"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Go by Example: Mutexes",
+          "url": "https://gobyexample.com/mutexes"
+        }
+      ]
+    },
+    {
+      "id": "sync-3",
+      "title": "RWMutex",
+      "category": "sync",
+      "difficulty": "advanced",
+      "description": "<p>sync.RWMutexは、読み込みは並行可能、書き込みは排他的なロックを提供します。</p><p>この課題では、読み込み多数・書き込み少数のシナリオを実装します。</p><ul><li>共有データとRWMutexを作成する</li><li>複数の読み込みGoルーチンを起動する</li><li>書き込みGoルーチンを起動する</li></ul>",
+      "objectives": [
+        "RWMutexの特性を理解する",
+        "RLock/RUnlockの使い方を習得する",
+        "読み書きロックの適切な使い分けを学ぶ"
+      ],
+      "hints": [
+        {
+          "text": "rwMutex.RLock()で読み込みロックを取得します",
+          "level": 1
+        },
+        {
+          "text": "rwMutex.Lock()で書き込みロックを取得します",
+          "level": 2
+        },
+        {
+          "text": "複数の読み込みは同時実行可能です",
+          "level": 3
+        }
+      ],
+      "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n    \"time\"\n)\n\ntype SafeMap struct {\n    mu sync.RWMutex\n    data map[string]int\n}\n\nfunc main() {\n    // RWMutexを使って実装してください\n    \n}",
+      "expectedKeywords": ["sync.RWMutex", "RLock", "RUnlock", "Lock"],
+      "solution": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n    \"time\"\n)\n\ntype SafeMap struct {\n    mu sync.RWMutex\n    data map[string]int\n}\n\nfunc (m *SafeMap) Read(key string) int {\n    m.mu.RLock()\n    defer m.mu.RUnlock()\n    return m.data[key]\n}\n\nfunc (m *SafeMap) Write(key string, value int) {\n    m.mu.Lock()\n    defer m.mu.Unlock()\n    m.data[key] = value\n}\n\nfunc main() {\n    m := &SafeMap{data: make(map[string]int)}\n    var wg sync.WaitGroup\n    \n    // Writer\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        m.Write(\"key\", 42)\n    }()\n    \n    time.Sleep(10 * time.Millisecond)\n    \n    // Readers\n    for i := 0; i < 3; i++ {\n        wg.Add(1)\n        go func(id int) {\n            defer wg.Done()\n            value := m.Read(\"key\")\n            fmt.Printf(\"Reader %d: %d\\n\", id, value)\n        }(i)\n    }\n    \n    wg.Wait()\n}",
+      "testCases": [
+        {
+          "expectedOutput": "Reader"
+        }
+      ],
+      "resources": [
+        {
+          "title": "sync.RWMutex Documentation",
+          "url": "https://pkg.go.dev/sync#RWMutex"
+        }
+      ]
+    }
+  ]
+}
