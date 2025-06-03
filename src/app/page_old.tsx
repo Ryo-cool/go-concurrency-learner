@@ -6,15 +6,12 @@ import { LessonPanel } from '@/components/lesson-panel/LessonPanel';
 import { CodeEditor } from '@/components/code-editor/CodeEditor';
 import { ConsolePanel } from '@/components/console-panel/ConsolePanel';
 import { Navigation } from '@/components/navigation/Navigation';
-import { ToastContainer } from '@/components/toast/ToastContainer';
 import { useGoExecutor } from '@/hooks/useGoExecutor';
 import { useLessons } from '@/hooks/useLessons';
-import { useToast } from '@/hooks/useToast';
 
 export default function Home() {
   const [code, setCode] = useState('');
   const goExecutor = useGoExecutor();
-  const { toasts, showToast, removeToast } = useToast();
   const {
     lessons,
     currentLesson,
@@ -68,10 +65,7 @@ export default function Home() {
   };
 
   const handleRun = async () => {
-    const result = await goExecutor.execute(code);
-    if (result && result.type === 'error' && result.content.includes('validation failed')) {
-      showToast('error', result.content);
-    }
+    await goExecutor.execute(code);
   };
 
   const handleClear = () => {
@@ -88,10 +82,14 @@ export default function Home() {
     // Update progress if correct
     if (hasAllKeywords) {
       updateProgress(currentLesson.id, 'completed', currentCode);
-      showToast('success', '正解です！必要なキーワードが全て含まれています。');
-    } else {
-      showToast('error', '不正解です。ヒントを参考にもう一度試してみてください。');
     }
+
+    const message = hasAllKeywords
+      ? '✅ 正解です！必要なキーワードが全て含まれています。'
+      : '❌ 不正解です。ヒントを参考にもう一度試してみてください。';
+    
+    // 一時的にアラートで表示（後でより良いUIに改善）
+    alert(message);
   };
 
   if (isLoading) {
@@ -114,7 +112,6 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col">
-      <ToastContainer toasts={toasts} onRemove={removeToast} />
       <ThreePanelLayout
         className="flex-1"
         leftPanel={

@@ -126,7 +126,7 @@ export function useLessons(): UseLessonsReturn {
         updateProgress(id, 'in-progress', lesson.initialCode);
       }
     }
-  }, [allLessons, progress]);
+  }, [allLessons, progress]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateProgress = useCallback((id: string, status: LessonStatus, code?: string) => {
     setProgress(prev => {

@@ -5,7 +5,7 @@ import { ConsoleOutput } from '@/types/lesson';
 import { GoPlaygroundClient } from '@/lib/go-playground/client';
 
 export interface UseGoExecutorReturn {
-  execute: (code: string) => Promise<void>;
+  execute: (code: string) => Promise<ConsoleOutput | null>;
   isExecuting: boolean;
   outputs: ConsoleOutput[];
   clearOutputs: () => void;
@@ -20,7 +20,7 @@ export function useGoExecutor(): UseGoExecutorReturn {
   const execute = useCallback(async (code: string) => {
     // 既に実行中の場合は無視
     if (isExecuting) {
-      return;
+      return null;
     }
 
     // クライアントの初期化
@@ -33,15 +33,14 @@ export function useGoExecutor(): UseGoExecutorReturn {
     // コードの検証
     const validation = client.validateCode(code);
     if (!validation.isValid) {
-      setOutputs([
-        {
-          id: `${Date.now()}-validation-error`,
-          type: 'error',
-          content: validation.message || '無効なコードです',
-          timestamp: new Date(),
-        },
-      ]);
-      return;
+      const errorOutput: ConsoleOutput = {
+        id: `${Date.now()}-validation-error`,
+        type: 'error',
+        content: validation.message || '無効なコードです',
+        timestamp: new Date(),
+      };
+      setOutputs([errorOutput]);
+      return errorOutput;
     }
 
     setIsExecuting(true);
@@ -50,15 +49,16 @@ export function useGoExecutor(): UseGoExecutorReturn {
     try {
       const results = await client.execute(code);
       setOutputs(results);
-    } catch (error) {
-      setOutputs([
-        {
-          id: `${Date.now()}-unexpected-error`,
-          type: 'error',
-          content: '予期しないエラーが発生しました',
-          timestamp: new Date(),
-        },
-      ]);
+      return null;
+    } catch {
+      const errorOutput: ConsoleOutput = {
+        id: `${Date.now()}-unexpected-error`,
+        type: 'error',
+        content: '予期しないエラーが発生しました',
+        timestamp: new Date(),
+      };
+      setOutputs([errorOutput]);
+      return errorOutput;
     } finally {
       setIsExecuting(false);
     }

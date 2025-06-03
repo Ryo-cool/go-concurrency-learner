@@ -27,11 +27,13 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   onReset,
   className,
 }) => {
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<unknown>(null);
 
-  const handleEditorDidMount = (editor: any) => {
+  const handleEditorDidMount = (editor: unknown) => {
     editorRef.current = editor;
-    editor.focus();
+    if (editor && typeof editor === 'object' && 'focus' in editor && typeof editor.focus === 'function') {
+      editor.focus();
+    }
   };
 
   const handleChange = (value: string | undefined) => {
