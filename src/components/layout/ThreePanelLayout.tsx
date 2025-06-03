@@ -17,22 +17,22 @@ export const ThreePanelLayout: React.FC<ThreePanelLayoutProps> = ({
   return (
     <div
       className={cn(
-        'flex h-screen w-full min-w-[1024px] bg-gray-50',
+        'flex h-full w-full min-w-[1024px] gap-4 p-4',
         className
       )}
     >
       {/* Left Panel - 30% */}
-      <div className="w-[30%] border-r border-gray-200 bg-white">
+      <div className="w-[30%] glass rounded-2xl overflow-hidden">
         <div className="h-full overflow-y-auto">{leftPanel}</div>
       </div>
 
       {/* Center Panel - 40% */}
-      <div className="w-[40%] border-r border-gray-200 bg-white">
+      <div className="w-[40%] glass rounded-2xl overflow-hidden">
         <div className="h-full flex flex-col">{centerPanel}</div>
       </div>
 
       {/* Right Panel - 30% */}
-      <div className="w-[30%] bg-white">
+      <div className="w-[30%] glass rounded-2xl overflow-hidden">
         <div className="h-full overflow-y-auto">{rightPanel}</div>
       </div>
     </div>

@@ -43,11 +43,11 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   return (
     <div className={cn('flex flex-col h-full', className)}>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
-        <h2 className="text-sm font-medium text-gray-700">コードエディタ</h2>
+      <div className="flex items-center justify-between px-4 py-2 border-b border-white/20">
+        <h2 className="text-sm font-medium text-white">コードエディタ</h2>
         <button
           onClick={onReset}
-          className="flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+          className="flex items-center gap-1 px-3 py-1 text-sm text-white/80 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-300"
           title="コードをリセット"
         >
           <RotateCcw className="w-4 h-4" />
@@ -63,7 +63,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           value={initialCode}
           onChange={handleChange}
           onMount={handleEditorDidMount}
-          theme="vs"
+          theme="vs-dark"
           options={{
             minimap: { enabled: false },
             fontSize: 14,

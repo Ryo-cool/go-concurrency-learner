@@ -30,19 +30,19 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full text-white">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-gray-900">{lesson.title}</h1>
+      <div className="p-6 border-b border-white/20">
+        <h1 className="text-2xl font-bold">{lesson.title}</h1>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
         {/* Description */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">説明</h2>
+          <h2 className="text-lg font-semibold mb-3">説明</h2>
           <div
-            className="prose prose-sm text-gray-700"
+            className="prose prose-sm prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: lesson.description }}
           />
         </div>
@@ -51,7 +51,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
         <div className="mb-6">
           <button
             onClick={() => setShowHints(!showHints)}
-            className="flex items-center gap-2 text-lg font-semibold text-gray-800 hover:text-gray-600 transition-colors"
+            className="flex items-center gap-2 text-lg font-semibold hover:text-gray-200 transition-colors"
           >
             <HelpCircle className="w-5 h-5" />
             ヒント
@@ -67,9 +67,9 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
               {lesson.hints.slice(0, visibleHints).map((hint, index) => (
                 <div
                   key={index}
-                  className="p-3 bg-blue-50 border border-blue-200 rounded-md"
+                  className="p-3 glass-light rounded-lg"
                 >
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm">
                     ヒント {index + 1}: {typeof hint === 'string' ? hint : hint.text}
                   </p>
                 </div>
@@ -78,7 +78,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
               {visibleHints < lesson.hints.length && (
                 <button
                   onClick={handleShowMoreHints}
-                  className="text-sm text-blue-600 hover:text-blue-700 underline"
+                  className="text-sm text-white/80 hover:text-white underline"
                 >
                   次のヒントを表示 ({visibleHints}/{lesson.hints.length})
                 </button>
@@ -89,12 +89,12 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="p-6 border-t border-gray-200">
+      <div className="p-6 border-t border-white/20">
         <button
           onClick={handleCheckAnswer}
           className={cn(
-            'w-full py-3 px-4 rounded-md font-medium transition-colors',
-            'bg-blue-600 text-white hover:bg-blue-700',
+            'w-full py-3 px-4 rounded-lg font-medium transition-all duration-300',
+            'glass-light hover:bg-white/30',
             'flex items-center justify-center gap-2'
           )}
         >

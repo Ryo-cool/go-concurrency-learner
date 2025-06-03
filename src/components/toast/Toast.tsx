@@ -21,18 +21,18 @@ interface ToastProps {
 const toastConfig = {
   success: {
     icon: CheckCircle,
-    className: 'bg-green-50 border-green-200 text-green-800',
-    iconClassName: 'text-green-600',
+    className: 'glass-light border-green-200/30',
+    iconClassName: 'text-green-400',
   },
   error: {
     icon: AlertCircle,
-    className: 'bg-red-50 border-red-200 text-red-800',
-    iconClassName: 'text-red-600',
+    className: 'glass-light border-red-200/30',
+    iconClassName: 'text-red-400',
   },
   info: {
     icon: Info,
-    className: 'bg-blue-50 border-blue-200 text-blue-800',
-    iconClassName: 'text-blue-600',
+    className: 'glass-light border-blue-200/30',
+    iconClassName: 'text-blue-400',
   },
 };
 
@@ -54,8 +54,8 @@ export const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
   return (
     <div
       className={cn(
-        'flex items-center gap-3 p-4 rounded-lg border shadow-lg animate-slide-in-right',
-        'min-w-[300px] max-w-md',
+        'flex items-center gap-3 p-4 rounded-lg animate-slide-in-right',
+        'min-w-[300px] max-w-md text-white',
         config.className
       )}
       role="alert"
@@ -65,8 +65,8 @@ export const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
       <button
         onClick={() => onRemove(id)}
         className={cn(
-          'p-1 rounded-md hover:bg-black/10 transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-offset-1'
+          'p-1 rounded-md hover:bg-white/20 transition-colors',
+          'focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-1'
         )}
         aria-label="閉じる"
       >
