@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import { IoClose, IoCheckmarkCircle, IoAlertCircle, IoInformationCircle } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 
 export type ToastType = 'success' | 'error' | 'info';
@@ -20,17 +20,17 @@ interface ToastProps {
 
 const toastConfig = {
   success: {
-    icon: CheckCircle,
+    icon: IoCheckmarkCircle,
     className: 'glass-light border-green-200/30',
     iconClassName: 'text-green-400',
   },
   error: {
-    icon: AlertCircle,
+    icon: IoAlertCircle,
     className: 'glass-light border-red-200/30',
     iconClassName: 'text-red-400',
   },
   info: {
-    icon: Info,
+    icon: IoInformationCircle,
     className: 'glass-light border-blue-200/30',
     iconClassName: 'text-blue-400',
   },
@@ -70,7 +70,7 @@ export const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
         )}
         aria-label="閉じる"
       >
-        <X className="w-4 h-4" />
+        <IoClose className="w-4 h-4" />
       </button>
     </div>
   );

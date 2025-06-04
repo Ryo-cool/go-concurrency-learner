@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Play, Trash2, Square } from 'lucide-react';
+import { IoPlay, IoTrash, IoStop } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 import { ConsoleOutput } from '@/types/lesson';
 
@@ -39,7 +39,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
             )}
             title="出力をクリア"
           >
-            <Trash2 className="w-4 h-4" />
+            <IoTrash className="w-4 h-4" />
             クリア
           </button>
           {isRunning && onCancel ? (
@@ -47,7 +47,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
               onClick={onCancel}
               className="flex items-center gap-1 px-4 py-1 text-sm font-medium rounded-lg transition-all duration-300 bg-red-500/80 text-white hover:bg-red-500"
             >
-              <Square className="w-4 h-4" />
+              <IoStop className="w-4 h-4" />
               停止
             </button>
           ) : (
@@ -62,7 +62,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
               )}
               title="コードを実行"
             >
-              <Play className="w-4 h-4" />
+              <IoPlay className="w-4 h-4" />
               実行
             </button>
           )}

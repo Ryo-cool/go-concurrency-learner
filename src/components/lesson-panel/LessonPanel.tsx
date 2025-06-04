@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, CheckCircle2, HelpCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
+import { IoChevronDown, IoChevronUp, IoCheckmarkCircle, IoHelpCircle, IoAlertCircle, IoInformationCircle, IoWarning } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 import { Lesson, ValidationResult } from '@/types/lesson';
 
@@ -75,9 +75,9 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
             {/* Feedback Messages */}
             <div className="space-y-2">
               {validationResult.feedback.map((feedback, index) => {
-                const Icon = feedback.type === 'success' ? CheckCircle2 :
-                           feedback.type === 'error' ? AlertCircle :
-                           feedback.type === 'warning' ? AlertTriangle : Info;
+                const Icon = feedback.type === 'success' ? IoCheckmarkCircle :
+                           feedback.type === 'error' ? IoAlertCircle :
+                           feedback.type === 'warning' ? IoWarning : IoInformationCircle;
                 return (
                   <div
                     key={index}
@@ -104,12 +104,12 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
             onClick={() => setShowHints(!showHints)}
             className="flex items-center gap-2 text-lg font-semibold hover:text-gray-200 transition-colors"
           >
-            <HelpCircle className="w-5 h-5" />
+            <IoHelpCircle className="w-5 h-5" />
             ヒント
             {showHints ? (
-              <ChevronUp className="w-4 h-4" />
+              <IoChevronUp className="w-4 h-4" />
             ) : (
-              <ChevronDown className="w-4 h-4" />
+              <IoChevronDown className="w-4 h-4" />
             )}
           </button>
 
@@ -149,7 +149,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
             'flex items-center justify-center gap-2'
           )}
         >
-          <CheckCircle2 className="w-5 h-5" />
+          <IoCheckmarkCircle className="w-5 h-5" />
           答え合わせ
         </button>
       </div>

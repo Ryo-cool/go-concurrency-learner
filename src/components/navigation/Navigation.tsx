@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 
 interface NavigationProps {
@@ -42,7 +42,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               : 'opacity-40 cursor-not-allowed'
           )}
         >
-          <ChevronLeft className="w-5 h-5" />
+          <IoChevronBack className="w-5 h-5" />
           前のレッスン
         </button>
 
@@ -80,7 +80,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           )}
         >
           次のレッスン
-          <ChevronRight className="w-5 h-5" />
+          <IoChevronForward className="w-5 h-5" />
         </button>
       </div>
     </div>

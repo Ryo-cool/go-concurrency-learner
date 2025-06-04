@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { RotateCcw } from 'lucide-react';
+import { IoRefresh } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
@@ -50,7 +50,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           className="flex items-center gap-1 px-3 py-1 text-sm text-white/80 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-300"
           title="コードをリセット"
         >
-          <RotateCcw className="w-4 h-4" />
+          <IoRefresh className="w-4 h-4" />
           リセット
         </button>
       </div>

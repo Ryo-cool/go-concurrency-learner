@@ -3,16 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLessons } from '@/hooks/useLessons';
-import { Category, Lesson } from '@/types/lesson';
-import { ChevronRight, CheckCircle, Clock, Play } from 'lucide-react';
+import { Lesson } from '@/types/lesson';
+import { IoChevronForward, IoCheckmarkCircle, IoTime, IoPlay } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 import { 
   getCategoryTheme, 
-  getCategoryCardClasses, 
-  getCategoryTextClasses,
-  getCategoryAccentClasses,
   getDifficultyBadgeClasses,
-  getProgressBarClasses,
   CategoryTheme
 } from '@/lib/theme';
 
@@ -70,27 +66,6 @@ export default function LessonsPage() {
     return Math.round((completed / categoryLessons.length) * 100);
   };
 
-  const getDifficultyColor = (difficulty: Lesson['difficulty']) => {
-    switch (difficulty) {
-      case 'beginner':
-        return 'text-green-600 bg-green-50';
-      case 'intermediate':
-        return 'text-yellow-600 bg-yellow-50';
-      case 'advanced':
-        return 'text-red-600 bg-red-50';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
-      case 'in-progress':
-        return <Clock className="w-5 h-5 text-yellow-600" />;
-      default:
-        return <Play className="w-5 h-5 text-gray-400" />;
-    }
-  };
 
   if (isLoading) {
     return (
@@ -251,11 +226,11 @@ function LessonCard({ lesson, status, onClick }: LessonCardProps) {
     const iconClass = "w-5 h-5";
     switch (status) {
       case 'completed':
-        return <CheckCircle className={cn(iconClass, "text-green-600")} />;
+        return <IoCheckmarkCircle className={cn(iconClass, "text-green-600")} />;
       case 'in-progress':
-        return <Clock className={cn(iconClass, "text-yellow-600")} />;
+        return <IoTime className={cn(iconClass, "text-yellow-600")} />;
       default:
-        return <Play className={cn(iconClass, theme.accentColor)} />;
+        return <IoPlay className={cn(iconClass, theme.accentColor)} />;
     }
   };
 
@@ -304,7 +279,7 @@ function LessonCard({ lesson, status, onClick }: LessonCardProps) {
           <span className={cn("text-xs opacity-60", theme.textColor)}>
             {lesson.objectives.length} つの学習目標
           </span>
-          <ChevronRight className={cn("w-4 h-4 opacity-60", theme.textColor)} />
+          <IoChevronForward className={cn("w-4 h-4 opacity-60", theme.textColor)} />
         </div>
       </div>
     </div>
