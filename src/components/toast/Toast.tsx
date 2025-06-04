@@ -21,18 +21,18 @@ interface ToastProps {
 const toastConfig = {
   success: {
     icon: IoCheckmarkCircle,
-    className: 'glass-light border-green-200/30',
-    iconClassName: 'text-green-400',
+    className: 'bg-green-600/95 backdrop-blur-sm border-green-500/50 text-white shadow-lg shadow-green-600/30',
+    iconClassName: 'text-green-100',
   },
   error: {
     icon: IoAlertCircle,
-    className: 'glass-light border-red-200/30',
-    iconClassName: 'text-red-400',
+    className: 'bg-red-600/95 backdrop-blur-sm border-red-500/50 text-white shadow-lg shadow-red-600/30',
+    iconClassName: 'text-red-100',
   },
   info: {
     icon: IoInformationCircle,
-    className: 'glass-light border-blue-200/30',
-    iconClassName: 'text-blue-400',
+    className: 'bg-blue-600/95 backdrop-blur-sm border-blue-500/50 text-white shadow-lg shadow-blue-600/30',
+    iconClassName: 'text-blue-100',
   },
 };
 
@@ -55,18 +55,19 @@ export const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
     <div
       className={cn(
         'flex items-center gap-3 p-4 rounded-lg animate-slide-in-right',
-        'min-w-[300px] max-w-md text-white',
+        'min-w-[320px] max-w-md border',
         config.className
       )}
       role="alert"
     >
-      <Icon className={cn('w-5 h-5 flex-shrink-0', config.iconClassName)} />
-      <p className="flex-1 text-sm font-medium">{message}</p>
+      <Icon className={cn('w-6 h-6 flex-shrink-0', config.iconClassName)} />
+      <p className="flex-1 text-sm font-bold tracking-wide drop-shadow-sm">{message}</p>
       <button
         onClick={() => onRemove(id)}
         className={cn(
-          'p-1 rounded-md hover:bg-white/20 transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-1'
+          'p-1.5 rounded-md hover:bg-white/30 transition-colors',
+          'focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-1',
+          'text-white/90 hover:text-white'
         )}
         aria-label="閉じる"
       >

@@ -72,21 +72,21 @@ body {
   
   /* 基礎編 - ネオモーフィズム */
   .theme-basic {
-    --theme-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    --theme-card-bg: rgba(255, 255, 255, 0.98);
-    --theme-card-shadow: 0 8px 32px rgba(168, 237, 234, 0.3);
-    --theme-border: rgba(168, 237, 234, 0.4);
-    --theme-text: #0f172a;
-    --theme-accent: #0d9488;
+    --theme-gradient: linear-gradient(135deg, #f0f8ff 0%, #fff5ee 50%, #f8f4ff 100%);
+    --theme-card-bg: rgba(255, 255, 255, 0.9);
+    --theme-card-shadow: 0 8px 32px rgba(99, 102, 241, 0.12);
+    --theme-border: rgba(99, 102, 241, 0.15);
+    --theme-text: #374151;
+    --theme-accent: #10b981;
   }
 
   .neomorphism {
     background: var(--theme-card-bg);
     border-radius: 20px;
     box-shadow: 
-      20px 20px 60px rgba(168, 237, 234, 0.15),
-      -20px -20px 60px rgba(255, 255, 255, 0.9),
-      inset 0 0 20px rgba(168, 237, 234, 0.08);
+      15px 15px 40px rgba(99, 102, 241, 0.08),
+      -15px -15px 40px rgba(255, 255, 255, 0.9),
+      inset 0 0 15px rgba(99, 102, 241, 0.03);
     border: 1px solid var(--theme-border);
     backdrop-filter: blur(8px);
   }

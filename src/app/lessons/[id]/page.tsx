@@ -168,7 +168,7 @@ export default function LessonPage({ params }: LessonPageProps) {
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       
       {/* Header with back button */}
-      <div className="border-b border-white/20 px-4 py-2">
+      <div className="border-b border-gray-200/30 px-4 py-2">
         <button
           onClick={handleBackToList}
           className={`flex items-center gap-2 ${theme.textColor} hover:opacity-80 transition-colors`}
@@ -193,6 +193,7 @@ export default function LessonPage({ params }: LessonPageProps) {
             initialCode={code}
             onChange={handleCodeChange}
             onReset={handleReset}
+            lesson={currentLesson}
           />
         }
         rightPanel={
@@ -202,6 +203,7 @@ export default function LessonPage({ params }: LessonPageProps) {
             onClear={handleClear}
             isRunning={goExecutor.isExecuting}
             onCancel={goExecutor.cancelExecution}
+            lesson={currentLesson}
           />
         }
       />
@@ -212,6 +214,7 @@ export default function LessonPage({ params }: LessonPageProps) {
         onNext={handleNext}
         canGoPrevious={currentIndex > 0}
         canGoNext={currentIndex < lessons.length - 1}
+        lesson={currentLesson}
       />
     </div>
   );

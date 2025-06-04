@@ -18,8 +18,8 @@ export const CATEGORY_THEMES: Record<CategoryTheme, ThemeConfig> = {
     name: '基礎編',
     morphismClass: 'neomorphism',
     themeClass: 'theme-basic',
-    textColor: 'text-gray-900 font-medium',
-    accentColor: 'text-teal-800',
+    textColor: 'text-gray-700 font-semibold',
+    accentColor: 'text-emerald-600',
     description: 'ネオモーフィズム - 柔らかい影の立体感'
   },
   channel: {
