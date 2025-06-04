@@ -16,6 +16,9 @@ export interface Lesson {
     input?: string;
     expectedOutput: string;
   }[];
+  expectedOutputPatterns?: string[]; // 正規表現パターン
+  requiredOutputs?: string[]; // 必須の出力文字列
+  validationMode?: 'keywords' | 'output' | 'both'; // 検証モード
   resources?: {
     title: string;
     url: string;
@@ -44,4 +47,25 @@ export interface Category {
   description: string;
   icon?: string;
   order: number;
+}
+
+export interface ValidationResult {
+  isCorrect: boolean;
+  score: number; // 0-100
+  feedback: {
+    type: 'success' | 'error' | 'warning' | 'info';
+    message: string;
+  }[];
+  details?: {
+    keywordCheck?: {
+      passed: boolean;
+      missing: string[];
+    };
+    outputCheck?: {
+      passed: boolean;
+      expected: string[];
+      actual: string[];
+      missing: string[];
+    };
+  };
 }

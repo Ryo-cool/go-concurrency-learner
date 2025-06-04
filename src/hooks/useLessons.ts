@@ -29,10 +29,11 @@ export function useLessons(): UseLessonsReturn {
   const [categories, setCategories] = useState<Category[]>([]);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [progress, setProgress] = useState<LessonProgress[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load progress from localStorage
   useEffect(() => {
@@ -52,6 +53,11 @@ export function useLessons(): UseLessonsReturn {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progress));
     }
   }, [progress]);
+
+  // Load lessons on initial mount
+  useEffect(() => {
+    loadLessons();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Apply filters
   useEffect(() => {
@@ -76,6 +82,8 @@ export function useLessons(): UseLessonsReturn {
   }, [allLessons, categoryFilter, searchQuery]);
 
   const loadLessons = useCallback(async () => {
+    if (isInitialized) return;
+    
     setIsLoading(true);
     setError(null);
 
@@ -103,17 +111,13 @@ export function useLessons(): UseLessonsReturn {
       }
 
       setAllLessons(allLoadedLessons);
-      
-      // Select first lesson if none selected
-      if (!currentLesson && allLoadedLessons.length > 0) {
-        setCurrentLesson(allLoadedLessons[0]);
-      }
+      setIsInitialized(true);
     } catch (e) {
       setError(e instanceof Error ? e : new Error('Failed to load lessons'));
     } finally {
       setIsLoading(false);
     }
-  }, [currentLesson]);
+  }, [isInitialized]);
 
   const selectLesson = useCallback((id: string) => {
     const lesson = allLessons.find(l => l.id === id);

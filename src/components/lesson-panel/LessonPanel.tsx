@@ -1,20 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, CheckCircle2, HelpCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, CheckCircle2, HelpCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Lesson } from '@/types/lesson';
+import { Lesson, ValidationResult } from '@/types/lesson';
 
 interface LessonPanelProps {
   lesson: Lesson;
   onCheckAnswer?: (code: string) => void;
   currentCode?: string;
+  validationResult?: ValidationResult | null;
 }
 
 export const LessonPanel: React.FC<LessonPanelProps> = ({
   lesson,
   onCheckAnswer,
   currentCode = '',
+  validationResult,
 }) => {
   const [showHints, setShowHints] = useState(false);
   const [visibleHints, setVisibleHints] = useState(1);
@@ -46,6 +48,55 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
             dangerouslySetInnerHTML={{ __html: lesson.description }}
           />
         </div>
+
+        {/* Validation Result */}
+        {validationResult && (
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold mb-3">検証結果</h2>
+            
+            {/* Score Bar */}
+            <div className="mb-4">
+              <div className="flex justify-between text-sm mb-1">
+                <span>スコア</span>
+                <span>{validationResult.score}%</span>
+              </div>
+              <div className="w-full bg-white/20 rounded-full h-2">
+                <div 
+                  className={cn(
+                    "h-full rounded-full transition-all duration-500",
+                    validationResult.score >= 80 ? "bg-green-500" : 
+                    validationResult.score >= 50 ? "bg-yellow-500" : "bg-red-500"
+                  )}
+                  style={{ width: `${validationResult.score}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Feedback Messages */}
+            <div className="space-y-2">
+              {validationResult.feedback.map((feedback, index) => {
+                const Icon = feedback.type === 'success' ? CheckCircle2 :
+                           feedback.type === 'error' ? AlertCircle :
+                           feedback.type === 'warning' ? AlertTriangle : Info;
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      "p-3 rounded-lg flex items-start gap-2",
+                      feedback.type === 'success' && "bg-green-500/20 text-green-200",
+                      feedback.type === 'error' && "bg-red-500/20 text-red-200",
+                      feedback.type === 'warning' && "bg-yellow-500/20 text-yellow-200",
+                      feedback.type === 'info' && "bg-blue-500/20 text-blue-200"
+                    )}
+                  >
+                    <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm">{feedback.message}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Hints Section */}
         <div className="mb-6">
