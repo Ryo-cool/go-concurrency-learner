@@ -11,10 +11,10 @@ import { ToastContainer } from '@/components/toast/ToastContainer';
 import { useGoExecutor } from '@/hooks/useGoExecutor';
 import { useLessons } from '@/hooks/useLessons';
 import { useToast } from '@/hooks/useToast';
-import { ArrowLeft } from 'lucide-react';
+import { IoArrowBack } from 'react-icons/io5';
 import { validateLesson } from '@/lib/validation';
 import { ValidationResult } from '@/types/lesson';
-import { getLessonTheme, CategoryTheme } from '@/lib/theme';
+import { getLessonTheme } from '@/lib/theme';
 
 interface LessonPageProps {
   params: Promise<{
@@ -34,7 +34,6 @@ export default function LessonPage({ params }: LessonPageProps) {
     currentLesson,
     isLoading,
     error,
-    loadLessons,
     selectLesson,
     updateProgress,
     getNextLesson,
@@ -154,7 +153,7 @@ export default function LessonPage({ params }: LessonPageProps) {
           onClick={handleBackToList}
           className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <IoArrowBack className="w-4 h-4" />
           レッスン一覧に戻る
         </button>
       </div>
@@ -174,7 +173,7 @@ export default function LessonPage({ params }: LessonPageProps) {
           onClick={handleBackToList}
           className={`flex items-center gap-2 ${theme.textColor} hover:opacity-80 transition-colors`}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <IoArrowBack className="w-4 h-4" />
           レッスン一覧
         </button>
       </div>

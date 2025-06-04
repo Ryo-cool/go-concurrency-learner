@@ -120,8 +120,6 @@ export function getDifficultyBadgeClasses(difficulty: 'beginner' | 'intermediate
 }
 
 export function getProgressBarClasses(category: CategoryTheme): string {
-  const theme = getCategoryTheme(category);
-  
   switch (category) {
     case 'basic':
       return 'bg-teal-500';
