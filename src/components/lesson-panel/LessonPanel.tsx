@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { IoChevronDown, IoChevronUp, IoCheckmarkCircle, IoHelpCircle, IoAlertCircle, IoInformationCircle, IoWarning } from 'react-icons/io5';
 import { cn } from '@/lib/utils';
 import { Lesson, ValidationResult } from '@/types/lesson';
+import { getLessonTheme } from '@/lib/theme';
 
 interface LessonPanelProps {
   lesson: Lesson;
@@ -31,10 +32,12 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
     }
   };
 
+  const theme = getLessonTheme(lesson);
+
   return (
-    <div className="flex flex-col h-full text-white">
+    <div className={cn("flex flex-col h-full", theme.textColor)}>
       {/* Header */}
-      <div className="p-6 border-b border-white/20">
+      <div className={cn("p-6 border-b", lesson.category === 'basic' ? "border-gray-200/50" : "border-white/20")}>
         <h1 className="text-2xl font-bold">{lesson.title}</h1>
       </div>
 
@@ -44,7 +47,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-3">説明</h2>
           <div
-            className="prose prose-sm prose-invert max-w-none"
+            className={cn("prose prose-sm max-w-none", lesson.category === 'basic' ? "prose-gray" : "prose-invert")}
             dangerouslySetInnerHTML={{ __html: lesson.description }}
           />
         </div>
@@ -60,7 +63,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
                 <span>スコア</span>
                 <span>{validationResult.score}%</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className={cn("w-full rounded-full h-2", lesson.category === 'basic' ? "bg-gray-200" : "bg-white/20")}>
                 <div 
                   className={cn(
                     "h-full rounded-full transition-all duration-500",
@@ -78,19 +81,35 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
                 const Icon = feedback.type === 'success' ? IoCheckmarkCircle :
                            feedback.type === 'error' ? IoAlertCircle :
                            feedback.type === 'warning' ? IoWarning : IoInformationCircle;
+                
+                const getMessageStyles = (type: string, isBasic: boolean) => {
+                  if (isBasic) {
+                    return {
+                      success: "bg-green-50 border border-green-200 text-green-800",
+                      error: "bg-red-50 border border-red-200 text-red-800", 
+                      warning: "bg-yellow-50 border border-yellow-200 text-yellow-800",
+                      info: "bg-blue-50 border border-blue-200 text-blue-800"
+                    }[type];
+                  } else {
+                    return {
+                      success: "bg-green-500/20 text-green-200 border border-green-500/30",
+                      error: "bg-red-500/20 text-red-200 border border-red-500/30",
+                      warning: "bg-yellow-500/20 text-yellow-200 border border-yellow-500/30", 
+                      info: "bg-blue-500/20 text-blue-200 border border-blue-500/30"
+                    }[type];
+                  }
+                };
+                
                 return (
                   <div
                     key={index}
                     className={cn(
-                      "p-3 rounded-lg flex items-start gap-2",
-                      feedback.type === 'success' && "bg-green-500/20 text-green-200",
-                      feedback.type === 'error' && "bg-red-500/20 text-red-200",
-                      feedback.type === 'warning' && "bg-yellow-500/20 text-yellow-200",
-                      feedback.type === 'info' && "bg-blue-500/20 text-blue-200"
+                      "p-3 rounded-lg flex items-start gap-3 shadow-sm backdrop-blur-sm",
+                      getMessageStyles(feedback.type, lesson.category === 'basic')
                     )}
                   >
                     <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm">{feedback.message}</p>
+                    <p className="text-sm font-medium leading-relaxed">{feedback.message}</p>
                   </div>
                 );
               })}
@@ -102,7 +121,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
         <div className="mb-6">
           <button
             onClick={() => setShowHints(!showHints)}
-            className="flex items-center gap-2 text-lg font-semibold hover:text-gray-200 transition-colors"
+            className={cn("flex items-center gap-2 text-lg font-semibold hover:opacity-80 transition-all", theme.textColor)}
           >
             <IoHelpCircle className="w-5 h-5" />
             ヒント
@@ -118,9 +137,14 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
               {lesson.hints.slice(0, visibleHints).map((hint, index) => (
                 <div
                   key={index}
-                  className="p-3 glass-light rounded-lg"
+                  className={cn(
+                    "p-3 rounded-lg border shadow-sm backdrop-blur-sm",
+                    lesson.category === 'basic' 
+                      ? "bg-blue-50 border-blue-200 text-blue-800" 
+                      : "bg-white/10 border-white/20 text-white/90"
+                  )}
                 >
-                  <p className="text-sm">
+                  <p className="text-sm font-medium leading-relaxed">
                     ヒント {index + 1}: {typeof hint === 'string' ? hint : hint.text}
                   </p>
                 </div>
@@ -129,7 +153,7 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
               {visibleHints < lesson.hints.length && (
                 <button
                   onClick={handleShowMoreHints}
-                  className="text-sm text-white/80 hover:text-white underline"
+                  className={cn("text-sm opacity-80 hover:opacity-100 underline transition-opacity", theme.textColor)}
                 >
                   次のヒントを表示 ({visibleHints}/{lesson.hints.length})
                 </button>
@@ -140,13 +164,15 @@ export const LessonPanel: React.FC<LessonPanelProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="p-6 border-t border-white/20">
+      <div className={cn("p-6 border-t", lesson.category === 'basic' ? "border-gray-200/50" : "border-white/20")}>
         <button
           onClick={handleCheckAnswer}
           className={cn(
-            'w-full py-3 px-4 rounded-lg font-medium transition-all duration-300',
-            'glass-light hover:bg-white/30',
-            'flex items-center justify-center gap-2'
+            'w-full py-3 px-4 rounded-lg font-bold transition-all duration-300',
+            'flex items-center justify-center gap-2 shadow-lg backdrop-blur-sm border',
+            lesson.category === 'basic' 
+              ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-400' 
+              : 'bg-white/20 hover:bg-white/30 text-white border-white/30'
           )}
         >
           <IoCheckmarkCircle className="w-5 h-5" />

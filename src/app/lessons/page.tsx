@@ -146,7 +146,6 @@ export default function LessonsPage() {
               >
                 <span>{category.icon}</span>
                 {category.name}
-                <span className="text-xs opacity-70">({theme.description})</span>
               </button>
             );
           })}

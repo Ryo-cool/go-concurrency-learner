@@ -18,8 +18,8 @@ export const CATEGORY_THEMES: Record<CategoryTheme, ThemeConfig> = {
     name: '基礎編',
     morphismClass: 'neomorphism',
     themeClass: 'theme-basic',
-    textColor: 'text-gray-800',
-    accentColor: 'text-teal-700',
+    textColor: 'text-gray-700 font-semibold',
+    accentColor: 'text-emerald-600',
     description: 'ネオモーフィズム - 柔らかい影の立体感'
   },
   channel: {
@@ -27,8 +27,8 @@ export const CATEGORY_THEMES: Record<CategoryTheme, ThemeConfig> = {
     name: 'チャネル操作編',
     morphismClass: 'glassmorphism',
     themeClass: 'theme-channel',
-    textColor: 'text-white font-semibold',
-    accentColor: 'text-indigo-200',
+    textColor: 'text-white font-bold drop-shadow-sm',
+    accentColor: 'text-indigo-100',
     description: 'グラスモーフィズム - 透明感のあるガラス風'
   },
   sync: {
@@ -36,8 +36,8 @@ export const CATEGORY_THEMES: Record<CategoryTheme, ThemeConfig> = {
     name: '同期編',
     morphismClass: 'metallicmorphism',
     themeClass: 'theme-sync',
-    textColor: 'text-gray-100',
-    accentColor: 'text-gray-400',
+    textColor: 'text-white font-semibold',
+    accentColor: 'text-gray-300',
     description: 'メタリックモーフィズム - 金属質の質感'
   },
   pattern: {
@@ -45,8 +45,8 @@ export const CATEGORY_THEMES: Record<CategoryTheme, ThemeConfig> = {
     name: '実践パターン編',
     morphismClass: 'cybermorphism',
     themeClass: 'theme-pattern',
-    textColor: 'text-gray-100',
-    accentColor: 'text-purple-300',
+    textColor: 'text-white font-bold drop-shadow-md',
+    accentColor: 'text-purple-200',
     description: 'サイバーモーフィズム - 未来的なネオン風'
   }
 };
