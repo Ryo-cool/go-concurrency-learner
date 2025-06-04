@@ -27,6 +27,8 @@
       ],
       "initialCode": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    // ここにコードを書いてください\n    \n}",
       "expectedKeywords": ["go", "fmt.Println", "time.Sleep", "Goroutine"],
+      "validationMode": "both",
+      "requiredOutputs": ["Hello from Goroutine!"],
       "solution": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    go func() {\n        fmt.Println(\"Hello from Goroutine!\")\n    }()\n    \n    time.Sleep(1 * time.Second)\n    fmt.Println(\"Main function completed\")\n}",
       "testCases": [
         {
@@ -67,6 +69,8 @@
       ],
       "initialCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    // チャネルを作成してメッセージを送受信してください\n    \n}",
       "expectedKeywords": ["make", "chan", "<-"],
+      "validationMode": "both",
+      "requiredOutputs": ["Hello from channel!"],
       "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan string)\n    \n    go func() {\n        ch <- \"Hello from channel!\"\n    }()\n    \n    message := <-ch\n    fmt.Println(message)\n}",
       "testCases": [
         {
@@ -107,6 +111,8 @@
       ],
       "initialCode": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    // バッファ付きチャネルを作成して使用してください\n    \n}",
       "expectedKeywords": ["make", "chan", "2"],
+      "validationMode": "output",
+      "expectedOutputPatterns": ["^1\\s*\\n\\s*2$"],
       "solution": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan int, 2)\n    \n    ch <- 1\n    ch <- 2\n    \n    fmt.Println(<-ch)\n    fmt.Println(<-ch)\n}",
       "testCases": [
         {

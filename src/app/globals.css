@@ -67,4 +67,141 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
   }
+
+  /* ===== カテゴリ別テーマ ===== */
+  
+  /* 基礎編 - ネオモーフィズム */
+  .theme-basic {
+    --theme-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    --theme-card-bg: rgba(255, 255, 255, 0.95);
+    --theme-card-shadow: 0 8px 32px rgba(168, 237, 234, 0.3);
+    --theme-border: rgba(168, 237, 234, 0.4);
+    --theme-text: #1a202c;
+    --theme-accent: #0d9488;
+  }
+
+  .neomorphism {
+    background: var(--theme-card-bg);
+    border-radius: 20px;
+    box-shadow: 
+      20px 20px 60px rgba(168, 237, 234, 0.15),
+      -20px -20px 60px rgba(255, 255, 255, 0.9),
+      inset 0 0 20px rgba(168, 237, 234, 0.08);
+    border: 1px solid var(--theme-border);
+    backdrop-filter: blur(8px);
+  }
+
+  /* チャネル操作編 - グラスモーフィズム */
+  .theme-channel {
+    --theme-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    --theme-card-bg: linear-gradient(145deg, rgba(79, 70, 229, 0.4), rgba(124, 58, 237, 0.3));
+    --theme-card-shadow: 
+      0 8px 32px rgba(79, 70, 229, 0.4),
+      0 0 20px rgba(124, 58, 237, 0.2);
+    --theme-border: rgba(255, 255, 255, 0.4);
+    --theme-text: #ffffff;
+    --theme-accent: #c7d2fe;
+  }
+
+  .glassmorphism {
+    background: var(--theme-card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 16px;
+    border: 2px solid var(--theme-border);
+    box-shadow: var(--theme-card-shadow);
+    position: relative;
+  }
+
+  .glassmorphism::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    pointer-events: none;
+  }
+
+  /* 同期編 - メタリックモーフィズム */
+  .theme-sync {
+    --theme-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
+    --theme-card-bg: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+    --theme-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --theme-border: rgba(255, 255, 255, 0.1);
+    --theme-text: #f7fafc;
+    --theme-accent: #718096;
+  }
+
+  .metallicmorphism {
+    background: var(--theme-card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--theme-border);
+    box-shadow: 
+      var(--theme-card-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+    position: relative;
+  }
+
+  .metallicmorphism::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  }
+
+  /* 実践パターン編 - サイバーモーフィズム */
+  .theme-pattern {
+    --theme-gradient: linear-gradient(135deg, #0f0f0f 0%, #1a0033 50%, #000000 100%);
+    --theme-card-bg: rgba(26, 0, 51, 0.8);
+    --theme-card-shadow: 
+      0 0 20px rgba(138, 43, 226, 0.5),
+      0 8px 32px rgba(75, 0, 130, 0.3);
+    --theme-border: rgba(138, 43, 226, 0.5);
+    --theme-text: #e2e8f0;
+    --theme-accent: #8a2be2;
+  }
+
+  .cybermorphism {
+    background: var(--theme-card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-card-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cybermorphism::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(138, 43, 226, 0.2),
+      transparent
+    );
+    animation: cyber-glow 3s infinite;
+  }
+
+  @keyframes cyber-glow {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+  }
+
+  /* 各テーマの背景 */
+  .bg-theme-basic { background: var(--theme-gradient); }
+  .bg-theme-channel { background: var(--theme-gradient); }
+  .bg-theme-sync { background: var(--theme-gradient); }
+  .bg-theme-pattern { background: var(--theme-gradient); }
 }
