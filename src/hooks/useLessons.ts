@@ -88,29 +88,18 @@ export function useLessons(): UseLessonsReturn {
     setError(null);
 
     try {
-      // Load categories
-      const categoriesRes = await fetch('/lessons/categories.json');
+      // Load categories from API
+      const categoriesRes = await fetch('/api/lessons/categories');
       if (!categoriesRes.ok) throw new Error('Failed to load categories');
       const categoriesData = await categoriesRes.json();
       setCategories(categoriesData.categories);
 
-      // Load lessons from each category
-      const allLoadedLessons: Lesson[] = [];
-      const categoryIds = ['basic', 'channel', 'sync', 'pattern'];
+      // Load all lessons from API
+      const lessonsRes = await fetch('/api/lessons');
+      if (!lessonsRes.ok) throw new Error('Failed to load lessons');
+      const lessonsData = await lessonsRes.json();
+      setAllLessons(lessonsData.lessons);
 
-      for (const categoryId of categoryIds) {
-        try {
-          const res = await fetch(`/lessons/${categoryId}.json`);
-          if (res.ok) {
-            const data = await res.json();
-            allLoadedLessons.push(...data.lessons);
-          }
-        } catch (e) {
-          console.error(`Failed to load lessons for ${categoryId}:`, e);
-        }
-      }
-
-      setAllLessons(allLoadedLessons);
       setIsInitialized(true);
     } catch (e) {
       setError(e instanceof Error ? e : new Error('Failed to load lessons'));
